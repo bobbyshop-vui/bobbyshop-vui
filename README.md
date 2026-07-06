@@ -22,7 +22,7 @@
 > Lập trình như một trò chơi, mỗi dòng là một khám phá!
 
 ---
-# Nimformer Framework
+# Nimformer Framework (https://github.com/bobbyshop-vui/nimformers-framework)
 
 A pure **Nim** port of a small transformer (char-level LM) with real
 forward/backward passes running on the **Metal GPU** (macOS), plus a custom
