@@ -8,21 +8,21 @@
 - 🌱 Exploring every corner of the coding world. Luôn tò mò khám phá công nghệ.
 
 ## 🛠️ Skills | Kỹ năng
-- Python, JavaScript, C,bybylang (https://github.com/bobbydeveloper2014/bybylang)
+- Python, JavaScript, C,bybylang (https://github.com/bobbyshop-vui/bybylang)
 - Web: HTML, CSS, JavaScript, bybywebscript(commingsoon)
-- App: Python, JavaScript, bybylang (https://github.com/bobbydeveloper2014/bybylang)
-- Low-level: C, đang học Assembly, bybylang (https://github.com/bobbydeveloper2014/bybylang) 
+- App: Python, JavaScript, bybylang (https://github.com/bobbyshop-vui/bybylang)
+- Low-level: C, đang học Assembly, bybylang (https://github.com/bobbyshop-vui/bybylang) 
 
 ## 🚀 Projects | Dự án nổi bật
 - Personal learning website | Website học tập cá nhân
-- **BybyLang**(https://github.com/bobbydeveloper2014/bybylang): My own programming language! | Ngôn ngữ lập trình tự phát triển!
+- **BybyLang**(https://github.com/bobbyshop-vui/bybylang): My own programming language! | Ngôn ngữ lập trình tự phát triển!
 
 ## 🎯 Slogan
 > Code is a game, every line is a discovery!  
 > Lập trình như một trò chơi, mỗi dòng là một khám phá!
 
 ---
-# Nimformer Framework (https://github.com/bobbyshop-vui/nimformers-framework)
+# Nimformer Framework ([https://github.com/bobbyshop-vui/nimformers-framework](https://github.com/bobbyshop-vui/nimformers-framework))
 
 A pure **Nim** port of a small transformer (char-level LM) with real
 forward/backward passes running on the **Metal GPU** (macOS), plus a custom
@@ -475,114 +475,189 @@ and far more sensitive to error than large weight matrices.
   standard, correct math (multi-head causal self-attention, Post-LN,
   standard Adam bias-correction) rather than a line-by-line port of the
   original's unfinished placeholders.
-# 🧠 Tổng quan BybyLang (https://github.com/bobbydeveloper2014/bybylang) | BybyLang Overview (https://github.com/bobbydeveloper2014/bybylang)
+# 🧠 Tổng quan BybyLang | BybyLang Overview (https://github.com/bobbyshop-vui/bybylang)
 
-**BybyLang** là ngôn ngữ lập trình mình tự phát triển, có 4 chế độ hoạt động:
+A Nim-based DSL, AOT-compiled to Nim source then built into a native binary. Its core is a set of `gpu ...` commands for running tensor ops on CUDA / Metal / OpenCL / TSIC-IR / CPU, plus generic control flow and a set of low-level hardware-simulation commands.
 
-| Chế độ/Mode | Mức/Level      | Mô tả/Description |
-|-------------|----------------|-------------------|
-| mode 1      | Cấp thấp/Low   | Làm việc trực tiếp với chip, transistor, Bbit. <br> Directly with chip, transistor, Bbit. |
-| mode 2      | Cấp trung/Mid  | Viết code giống C nhưng cú pháp Byby. <br> Code like C, but Byby syntax. |
-| mode 3      | Cấp cao/High   | Như Python/Objective-C, không dùng (). <br> Like Python/Obj-C, no parentheses. |
-| mode 4      | Cấp web/Web    | Cho Byby UI Web, cú pháp cực ngắn. <br> Byby UI Web, super short syntax. |
+## Build & run
 
-## ⚙️ Cấu trúc chính | Main Syntax
-
-**Gán giá trị | Assign value:**
-```byby
-a is 5
+```bash
+make build #build library don't run that test code
+make test
+# equivalent to:
+nim c -d:release -o:bybylang bybylang.nim
+./bybylang demo/demo_gpu.bybylang --aot=demo/demo_gpu_out
+./demo/demo_gpu_out
 ```
 
-**Định nghĩa hàm | Define function:**
-```byby
-function say and name
-    print "Hello" and name
-```
-
-**Gọi hàm | Call function:**
-```byby
-say and "Byby"
-```
-
-**Import module:**
-```byby
-import "website.byby"
-```
-
-Không dùng (), {}, ;, hay dấu =.  
-Chữ `and` bắt buộc khi khai báo hàm.
-
-## ⚡ Tương tác phần cứng thực sự | Real Hardware-Level Operations
-
-BybyLang cho phép gửi lệnh trực tiếp tới phần cứng với các từ khoá đặc biệt: apu, bit, tran, mem...
-
-| Lệnh/Command    | Mô tả/Description | Ví dụ/Example |
-|-----------------|-------------------|---------------|
-| apu tran        | Gọi transistor thực, thực hiện thao tác phần cứng | apu tran "print" with "hello world" |
-| apu mem         | Ghi dữ liệu vào transistor memory | apu mem write "RAM0" with 5 |
-| apu read        | Đọc giá trị từ transistor hoặc thanh ghi | apu read "reg1" |
-| apu pin         | Điều khiển pin vật lý | apu pin 3 set high |
-| apu call        | Gọi hàm ở cấp chip (firmware) | apu call "GPU.flush" |
-| bit send        | Gửi tín hiệu dạng Bbit | bit send "10101101" |
-| bit recv        | Nhận tín hiệu từ mạch | bit recv |
-| mem map         | Ánh xạ vùng nhớ | mem map "GPU.buffer" |
-| mem push        | Đưa dữ liệu vào vùng nhớ | mem push "GPU.buffer" with imageData |
-| tran sync       | Đồng bộ hóa transistor | tran sync all |
-| tran pulse      | Phát xung transistor | tran pulse pin 3 width 5ns |
-| apu core        | Chạy code trực tiếp trên lõi chip | apu core 1 run "matrix.mul" |
-| apu gpu         | Gửi lệnh trực tiếp đến GPU | apu gpu draw "triangle" |
-| apu ai          | Kích hoạt AI module | apu ai run "text-process" |
-| apu bus         | Điều khiển bus truyền dữ liệu | apu bus transfer from "CPU" to "GPU" |
-
-## 🧩 Ví dụ thực tế | Real Examples
-
-**1️⃣ Cấp thấp (mode 1):**
-```byby
-mode is 1
-
-apu tran "print" with "hello world"
-apu mem write "ram0" with 123
-apu pin 3 set high
-tran pulse pin 3 width 2ns
-```
-Đây là lệnh gửi trực tiếp xuống tầng transistor, không phải mô phỏng!
-
-**2️⃣ Cấp trung (mode 2):**
-```byby
-mode is 2
-
-function start and message
-    apu tran "print" with message
-    apu core 1 run "gpu.load"
-```
-
-**3️⃣ Cấp cao (mode 3):**
-```byby
-mode is 3
-
-function say and name
-    print "hello" and name
-```
-
-**4️⃣ Cấp web (mode 4):**
-```byby
-mode is 4
-
-component hello
-    text "hello web"
-```
-
-## 🧠 Giải thích sâu về apu tran | Deep Dive
-
-- **apu** = Access Processing Unit → gọi trực tiếp tầng transistor
-- **tran** = Transistor Handler → module xử lý transistor logic
-- `apu tran "print" with "hello world"` nghĩa là:
-    - Gửi tín hiệu đến transistor tên "print"
-    - Truyền payload "hello world"
-    - Yêu cầu transistor kích hoạt dòng điện để in ra
+`--aot=<path>` generates `<path>.nim`, compiles it with Nim, and produces the binary `<path>`.
 
 ---
 
+## 1. General syntax
+
+- One command per line in a `.bybylang` file. Indentation (spaces/tabs) determines the block for `if/elif/else/while/for`.
+- `#` at the start of a line is a comment.
+- `import name` or `import "path/name.bybylang"` — recursive import, `.bybylang` extension auto-appended, cycle-protected via absolute path.
+- `print <expr>` → generates `echo <expr>`.
+- `function NAME` ... a line containing only `NAME` closes the definition; call it with `call NAME`.
+- `if cond:` / `elif cond:` / `else:` / `while cond:` / `for x in range(a, b):` — translated directly to the equivalent Nim construct, arbitrarily nestable.
+- `mode is N` (N = 1..4) → prints "Mode 1: Low-level" / "Mode 2: Mid-level" / "Mode 3: High-level" / "Mode 4: Web-level" (any other N → "Unknown mode").
+
+## 2. `gpu ...` commands
+
+### Select backend
+
+```
+gpu backend is "auto"      # auto | cpu | cuda | metal | opencl | tsic
+```
+
+`auto` probes in order: CUDA (NVIDIA) → Metal (macOS) → OpenCL → plain CPU.
+By default, **silent CPU fallback is forbidden** (`gForbidCpuFallback = true`): if a specific GPU backend is requested and it's unavailable or fails, the program raises instead of silently falling back to CPU (so you never accidentally train on CPU without noticing).
+
+### Declare an array
+
+```
+gpu array A = [1, 2, 3, 4]
+```
+
+Generates `var A: seq[float32] = @[1, 2, 3, 4].mapIt(it.float32)`. **Must be declared before use** — codegen has no hoisting; it translates lines strictly in file order.
+
+### Basic binary ops
+
+```
+gpu add A, B -> C
+gpu sub A, B -> C
+gpu mul A, B -> C
+gpu div A, B -> C
+```
+
+A trailing `size N` is descriptive only and doesn't affect codegen.
+
+### Matmul
+
+```
+gpu matmul A, B -> C m M k K n N
+```
+A: [M×K], B: [K×N] → C: [M×N].
+
+```
+gpu matmul2 A1, B1, A2, B2 -> C1, C2 m1 M k1 K n1 N m2 M k2 K n2 N
+```
+Two independent matmuls fused into a single call.
+
+### Activations
+
+```
+gpu relu X -> Y
+gpu sigmoid X -> Y
+gpu tanh X -> Y
+gpu apflu X -> Y alpha A beta B      # defaults: alpha=0.1, beta=1.0 if omitted
+gpu apflu_backward X, DY -> DX alpha A beta B   # alpha/beta optional, same defaults
+```
+
+### Fused add + activation
+
+```
+gpu fused_add_act A, B -> C act "relu"    # "relu" | "sigmoid" | "tanh" | "none"
+```
+
+### Softmax / LayerNorm
+
+```
+gpu softmax X -> Y rows R cols C
+gpu layernorm X, GAMMA, BETA -> Y rows R cols C eps E
+gpu layernorm_backward DY, X, GAMMA, BETA -> DX, DGAMMA, DBETA rows R cols C eps E
+```
+
+### Embedding
+
+```
+gpu embedding TABLE, INDICES -> Y vocab V dim D
+```
+`INDICES` is auto-cast to `int32`.
+
+### Attention (fused)
+
+```
+gpu attention Q, K, V -> O, S_MATRIX B H S D scale SCALE
+gpu attention_backward Q, K, V, S_MATRIX, DY -> DQ, DK, DV B H S D scale SCALE
+```
+B=batch, H=heads, S=seq_len, D=head_dim.
+
+### Generic op (fallback)
+
+```
+gpu <other_op> A, B -> C
+```
+Generates `gpuOp("<other_op>", backend, A, B)` — requires a matching branch inside `gpuOp` to actually do something.
+
+---
+
+## 3. GPU Resident Tensor API (CUDA) — called directly from Nim
+
+Defined at the end of `gpubackend.nim`. **Not** exposed through `.bybylang` syntax — call it from plain Nim code to avoid a CPU↔GPU round trip on every op:
+
+```nim
+let ta = cuUpload(dataA)          # upload seq[float32] to the GPU once
+let tb = cuUpload(dataB)
+let tc = cuAddR(ta, tb)           # result STAYS on the GPU
+let out = cuDownload(tc)          # only download when you actually need the result
+cuFree(ta); cuFree(tb); cuFree(tc)
+```
+
+Available: `cuUpload`, `cuUploadIndices`, `cuDownload`, `cuFree`, `cuMatmulR`, `cuAddR`, `cuSubR`, `cuMulR`, `cuDivR`, `cuReluR`, `cuSigmoidR`, `cuTanhR`, `cuSoftmaxR`, `cuLayernormR`, `cuEmbeddingLookupR`.
+
+> ⚠️ **Note:** these resident-tensor calls exist but the forward pass generated from `.bybylang` (`genGpuLine`) does not call them — every `gpu ...` DSL command still uploads/downloads through `seq[float32]` on each call (per-op round trip), not the resident chain.
+
+---
+
+## 4. Low-level hardware-simulation commands
+
+These **do** have real DSL syntax, parsed in `genBlock` (`bybylang.nim` ~line 668–714) and lowered to calls that operate on a simulated RAM (1024 ints) / BUS (seq[string]) / 32 Pins:
+
+```
+apu tran "chip1" with 101010          # -> apuTran("chip1", 101010)
+apu mem write RAM0 with 42            # -> apuMem("write", "RAM0", "42")
+apu mem read RAM0 with 0              # -> apuMem("read", "RAM0", "0")
+apu core run                          # -> apuCore(1, "run")  (mode is always hardcoded to 1)
+apu pin 3 is high                     # -> apuPin(3, "high")
+bit send 1010                         # -> bitSend("1010")
+bit recv                              # -> bitRecv()
+mem map "device0"                     # -> memMap("device0")
+mem push RAM0 with 99                 # -> memPush("RAM0", "99")
+tran pulse pin 3 width 10ns           # -> tranPulse(3, "10ns")
+```
+
+Parser quirks worth knowing:
+- `apu mem <action> <target> with <value>` — `target` is read positionally as the 4th word (`left[3]`) and quotes are stripped; `action` should be `write` or `read`.
+- `apu core ...` ignores everything after `apu core` — it always emits `apuCore(1, "run")`.
+- `apu pin <n> is <state>` reads `n` from word index 2 and `state` from word index 4 — extra or missing words will misparse silently.
+- `tran pulse pin <n> width <w>` reads `n` from word index 3 and `w` as the **last** word on the line.
+
+`apuTran`, `apuMem`, `apuCore`, `apuPin`, `bitSend`, `bitRecv`, `memMap`, `memPush`, `tranPulse` show up as "declared but not used" warnings only when compiling `bybylang.nim` itself (the compiler for the DSL) — that warning is irrelevant to whether the DSL syntax works. The AOT-generated output (`--aot=...nim`) re-declares its own copies of these same procs (see `bybylang.nim` ~line 775 onward) so the compiled program can actually call them at runtime.
+
+---
+
+## 5. Backends
+
+| Backend | File | Notes |
+|---|---|---|
+| CUDA | `backends/cuda/cuda_driver.nim`, `cuda_runtime.nim` | Direct Driver API + cuBLAS, PTX JIT via `cuModuleLoadDataEx`, persistent context/module cache |
+| Metal | `backends/metal/metal_backend.nim` (+ `.metal` kernels) | macOS GPU, buffer/pipeline cache |
+| OpenCL | `backends/opencl/opencl_api.nim` | any other GPU/CPU |
+| TSIC-IR | `tsic_ir.nim` | intermediate IR, lowerable to PTX / MSL / OpenCL C / GLSL |
+| CPU | inside `gpubackend.nim` (`cpuRelu`, `cpuMatmul`, ...) | pure-Nim fallback, always correct but slow |
+
+## 6. Minimal example
+
+```
+gpu backend is "tsic"
+gpu array A = [1, 2, 3, 4]
+gpu array B = [5, 6, 7, 8]
+gpu add A, B -> C
+print C
+```
 ## 📫 Contact | Liên hệ
 - Email: akirasumeragi699@gmail.com
 - 🎥 [Kênh YouTube: Hưng MC](https://www.youtube.com/@hungmc4636)
